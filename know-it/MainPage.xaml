@@ -54,7 +54,7 @@
 
         <TextBox x:Name="UserNameBox" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                        PlaceholderText="Username" Height="30" Width="250" />
-            <TextBox x:Name="PasswordBox" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+            <PasswordBox x:Name="PasswordBox" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
                        PlaceholderText="Password" Height="30" Width="250" />
 
             <Grid Grid.Row="3">
@@ -70,7 +70,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button x:Name="LoginButton" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-                            Height="40" Width="100" Content="Sign In"/>
+                            Height="40" Width="100" Content="Sign In" Click="LoginButton_Click"/>
                     <Button x:Name="SignupButton" Click="SignupButton_Click"  Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"
                             Height="40" Width="100" Content="Sign Up"/>
                 </Grid>
@@ -78,8 +78,8 @@
                         Height="40" Width="200" Content="Change Server">
                     <Button.Flyout>
                         <Flyout>
-                            <TextBox x:Name="ServerName" Text="chat.chenmt.science" Width="250" 
-                                     Header="Server Name"/>
+                            <TextBox x:Name="ServerName" Text="{x:Bind serverName, Mode=TwoWay}" Width="250" 
+                                     Header="Server Name" />
                         </Flyout>
                     </Button.Flyout>
                 </Button>

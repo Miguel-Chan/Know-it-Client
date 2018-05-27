@@ -31,7 +31,13 @@ namespace know_it
         public MainPage()
         {
             this.InitializeComponent();
+            
             InitializeFrostedGlass(GlassHost);
+        }
+        
+        private string serverName {
+            get { return NetworkControl.AccessingURI; }
+            set { NetworkControl.AccessingURI = value; }
         }
 
         private void InitializeFrostedGlass(UIElement glassHost)
@@ -84,6 +90,11 @@ namespace know_it
             {
                 rootFrame.Navigate(typeof(SignupPage), UserNameBox.Text);
             }
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
