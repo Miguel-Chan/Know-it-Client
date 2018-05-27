@@ -1,0 +1,33 @@
+﻿<Page
+    x:Class="know_it.SignupPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:know_it"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Grid x:Name="GlassHost" />
+
+        <Grid Background="#4CE69494">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="8*"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="PageTitle" Grid.Row="0" Text="Sign Up" FontSize="40" FontWeight="Bold" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <ScrollViewer Grid.Row="1">
+                <Grid x:Name="infoArea">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="200"/>
+                    </Grid.RowDefinitions>
+                </Grid>
+            </ScrollViewer>
+
+        </Grid>
+
+    </Grid>
+</Page>
