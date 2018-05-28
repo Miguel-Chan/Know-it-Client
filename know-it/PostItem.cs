@@ -11,13 +11,13 @@ namespace know_it
         public string content;
         public string editor;
         public string imageURL;
-        public Dictionary<string, string> comments;
+        public List<KeyValuePair<String, String>> comments;
         public string videoURL;
         public int thumbs;
         public string title;
         public bool hasImage { get { return imageURL == ""; } }
         public bool hasVideo { get { return videoURL == ""; } }
-        public PostItem(string con, string ti, string edi, string img, string vid, int thu, Dictionary<string, string> com)
+        public PostItem(string con, string ti, string edi, string img, string vid, int thu, List<KeyValuePair<String, String>> com)
         {
             content = con;
             title = ti;

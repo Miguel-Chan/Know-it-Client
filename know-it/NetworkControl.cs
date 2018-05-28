@@ -176,10 +176,10 @@ namespace know_it
                     {"editor", editor },
                     {"title", title }
                 };
-                Dictionary<String, String> commentDict = new Dictionary<string, string>();
+                List<KeyValuePair<String, String>> commentDict = new List<KeyValuePair<string, string>>();
                 foreach (var pair in comments)
                 {
-                    commentDict.Add(pair.Key, pair.Value.GetString());
+                    commentDict.Add(new KeyValuePair<string, string>(pair.Key, pair.Value.GetString()));
                 }
                 res.Add("comment", commentDict);
                 return res;
@@ -202,7 +202,7 @@ namespace know_it
             string title = (string)postDict["title"];
             string editor = (string)postDict["editor"];
             return new PostItem(content, title, editor, imageURL, videoURL, thumbs,
-                            (Dictionary<string, string>)postDict["comment"]);
+                            (List<KeyValuePair<String, String>>)postDict["comment"]);
         }
 
         public static async Task<ObservableCollection<PostItem>> GetPostCollection(string username, string password)
