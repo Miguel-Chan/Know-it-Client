@@ -92,5 +92,30 @@ namespace know_it
                 //go to content page, passing a pair with username as key and password as value as parameter.
             }
         }
+
+        private async void UserNameBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (UserNameBox.Text.Length != 0)
+            {
+                string name = UserNameBox.Text;
+                var res = await NetworkControl.QueryUserInfo(name);
+                UserNameMsg.Text = "";
+                if (res["code"] == "0")
+                {
+                    UserNameMsg.Text = res["errMessage"];
+                }
+                else if (res["code"] == "1")
+                {
+                    string imgUrl = res["imageUrl"];
+                    string fullPath = NetworkControl.accessName + "/img/" + imgUrl;
+                    Logo.Source = new BitmapImage(new Uri(fullPath, UriKind.Absolute));
+                }
+            }
+        }
+
+        private void UserNameBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            UserNameMsg.Text = "";
+        }
     }
 }

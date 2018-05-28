@@ -17,7 +17,7 @@ namespace know_it
     {
         public static string AccessingURI = "chat.chenmt.science";
         private const string httpsPrefix = "https://";
-        private static string accessName { get { return httpsPrefix + AccessingURI; } }
+        public static string accessName { get { return httpsPrefix + AccessingURI; } }
 
         public static async Task<Dictionary<string, string>> QueryUserInfo(string userName)
         {
