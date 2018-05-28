@@ -15,8 +15,8 @@ namespace know_it
         public string videoURL;
         public int thumbs;
         public string title;
-        public bool hasImage { get { return imageURL == ""; } }
-        public bool hasVideo { get { return videoURL == ""; } }
+        public bool hasImage { get { return imageURL != ""; } }
+        public bool hasVideo { get { return videoURL != ""; } }
         public PostItem(string con, string ti, string edi, string img, string vid, int thu, List<KeyValuePair<String, String>> com)
         {
             content = con;
