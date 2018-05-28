@@ -50,6 +50,12 @@ namespace know_it
             }
         }
 
+        public static string GetFullPathUrl(string fileName)
+        {
+            string fullPath = accessName + "/img/" + fileName;
+            return fullPath;
+        }
+
         private static Dictionary<string, string> parseUserInfoJSON(string JSONStr)
         {
             var json = JsonObject.Parse(JSONStr);

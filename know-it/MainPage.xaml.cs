@@ -107,8 +107,8 @@ namespace know_it
                 else if (res["code"] == "1")
                 {
                     string imgUrl = res["imageUrl"];
-                    string fullPath = NetworkControl.accessName + "/img/" + imgUrl;
-                    Logo.Source = new BitmapImage(new Uri(fullPath, UriKind.Absolute));
+                    
+                    Logo.Source = new BitmapImage(new Uri(NetworkControl.GetFullPathUrl(imgUrl), UriKind.Absolute));
                 }
             }
         }
