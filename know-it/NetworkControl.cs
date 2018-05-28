@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -161,13 +163,18 @@ namespace know_it
                 var media = json.GetNamedString("media");
                 var image = json.GetNamedString("image");
                 var thumbs = json.GetNamedNumber("thumbs");
+                var editor = json.GetNamedString("editor");
+                var title = json.GetNamedString("title");
                 JsonObject comments = json.GetNamedObject("comments");
                 Dictionary<string, object> res = new Dictionary<string, object>
                 {
                     {"code", "1"},
                     {"content", content },
                     {"image", image },
-                    {"thumbs", thumbs.ToString() }
+                    {"media", media },
+                    {"thumbs", thumbs.ToString() },
+                    {"editor", editor },
+                    {"title", title }
                 };
                 Dictionary<String, String> commentDict = new Dictionary<string, string>();
                 foreach (var pair in comments)
@@ -185,7 +192,38 @@ namespace know_it
 
         }
 
-        public static async Task<List<string>> GetAllPost(string userName)
+        public static PostItem PostDictToPostItem(Dictionary<string, object> postDict)
+        {
+            if ((string)postDict["code"] != "1") return null;
+            string content = (string)postDict["content"];
+            string imageURL = (string)postDict["image"];
+            string videoURL = (string)postDict["media"];
+            int thumbs = Convert.ToInt32((string)postDict["thumbs"]);
+            string title = (string)postDict["title"];
+            string editor = (string)postDict["editor"];
+            return new PostItem(content, title, editor, imageURL, videoURL, thumbs,
+                            (Dictionary<string, string>)postDict["comment"]);
+        }
+
+        public static async Task<ObservableCollection<PostItem>> GetPostCollection(string username, string password)
+        {
+            var idList = await GetAllPostIDs();
+            if (idList == null) return null;
+            ObservableCollection<PostItem> collection = new ObservableCollection<PostItem>();
+            foreach (var id in idList)
+            {
+                var postDict = await GetPostFromID(username, password, id);
+                PostItem item = PostDictToPostItem(postDict);
+                if (item == null) {
+                    Debug.WriteLine("Server Error!");
+                    continue;
+                }
+                collection.Add(item);
+            }
+            return collection;
+        }
+
+        public static async Task<List<string>> GetAllPostIDs()
         {
             Dictionary<String, String> requestData = new Dictionary<string, string>();
 
