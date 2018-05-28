@@ -51,17 +51,17 @@ namespace know_it
         private static Dictionary<string, string> parseUserInfoJSON(string JSONStr)
         {
             var json = JsonObject.Parse(JSONStr);
-            var returnCode = json.GetNamedString("code");
-            if (returnCode == "0")
+            var returnCode = json.GetNamedNumber("code");
+            if (returnCode == 0)
             {
                 var errMsg = json.GetNamedString("errMessage");
                 return new Dictionary<string, string>
                 {
-                    {"code", returnCode},
+                    {"code", "0"},
                     {"errMessage", errMsg }
                 };
             }
-            else if (returnCode == "1")
+            else if (returnCode == 1)
             {
                 var username = json.GetNamedString("username");
                 var email = json.GetNamedString("email");
@@ -69,7 +69,7 @@ namespace know_it
                 var phone = json.GetNamedString("phone");
                 return new Dictionary<string, string>
                 {
-                    {"code", returnCode},
+                    {"code", "1"},
                     {"username", username },
                     {"email", email},
                     {"phone", phone},
@@ -145,29 +145,29 @@ namespace know_it
         private static Dictionary<string, object> parsePostInfo(string JSONStr)
         {
             JsonObject json = JsonObject.Parse(JSONStr);
-            var returnCode = json.GetNamedString("code");
-            if (returnCode == "0")
+            var returnCode = json.GetNamedNumber("code");
+            if (returnCode == 0)
             {
                 var errMsg = json.GetNamedString("errMessage");
                 return new Dictionary<string, object>
                 {
-                    {"code", returnCode},
+                    {"code", "0"},
                     {"errMessage", errMsg }
                 };
             }
-            else if (returnCode == "1")
+            else if (returnCode == 1)
             {
                 var content = json.GetNamedString("content");
                 var media = json.GetNamedString("media");
                 var image = json.GetNamedString("image");
-                var thumbs = json.GetNamedString("thumbs");
+                var thumbs = json.GetNamedNumber("thumbs");
                 JsonObject comments = json.GetNamedObject("comments");
                 Dictionary<string, object> res = new Dictionary<string, object>
                 {
-                    {"code", returnCode},
+                    {"code", "1"},
                     {"content", content },
                     {"image", image },
-                    {"thumbs", thumbs }
+                    {"thumbs", thumbs.ToString() }
                 };
                 Dictionary<String, String> commentDict = new Dictionary<string, string>();
                 foreach (var pair in comments)
@@ -262,21 +262,21 @@ namespace know_it
         private static Dictionary<string, string> parseBinaryResponse(string JSONStr)
         {
             var json = JsonObject.Parse(JSONStr);
-            var returnCode = json.GetNamedString("code");
-            if (returnCode == "0")
+            var returnCode = json.GetNamedNumber("code");
+            if (returnCode == 0)
             {
                 var errMsg = json.GetNamedString("errMessage");
                 return new Dictionary<string, string>
                 {
-                    {"code", returnCode},
+                    {"code", "0"},
                     {"errMessage", errMsg }
                 };
             }
-            else if (returnCode == "1")
+            else if (returnCode == 1)
             {
                 return new Dictionary<string, string>
                 {
-                    {"code", returnCode}
+                    {"code", "1"}
                 };
             }
             //Unexpected Return value 
@@ -369,13 +369,13 @@ namespace know_it
             builder.Append(username);
             builder.Append("&pass=");
             builder.Append(password);
-            builder.Append("&repass=");
+            builder.Append("&rePass=");
             builder.Append(repass);
             builder.Append("&phone=");
             builder.Append(phone);
             builder.Append("&email=");
             builder.Append(email);
-            builder.Append("&imgType=");
+            builder.Append("&imageType=");
             builder.Append(imgType);
             string url = builder.ToString();
 
@@ -407,10 +407,13 @@ namespace know_it
         {
             HttpClient client = new HttpClient();
             byte[] buffer;
-            if (media != null) {
+            string fileType = "";
+            if (media != null && (imagePostfixes.Contains(media.FileType.ToLower()) || 
+                videoPostfixes.Contains(media.FileType.ToLower()))) {
                 Stream fileStream = await media.OpenStreamForReadAsync();
                 buffer = new byte[(int)fileStream.Length];
                 fileStream.Read(buffer, 0, (int)fileStream.Length);
+                fileType = media.FileType.ToLower();
             }
             else
             {
@@ -420,8 +423,7 @@ namespace know_it
 
             ByteArrayContent content = new ByteArrayContent(buffer);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
-            string fileType = media.FileType.ToLower();
+           
 
             bool isImage = imagePostfixes.Contains(fileType);
             bool isVideo = videoPostfixes.Contains(fileType);
@@ -467,10 +469,12 @@ namespace know_it
         {
             HttpClient client = new HttpClient();
             byte[] buffer;
+            string imgType = "";
             if (avatar != null) {
                 Stream fileStream = await avatar.OpenStreamForReadAsync();
                 buffer = new byte[(int)fileStream.Length];
                 fileStream.Read(buffer, 0, (int)fileStream.Length);
+                imgType = avatar.FileType;
             }
             else
             {
@@ -479,8 +483,7 @@ namespace know_it
             }
             ByteArrayContent content = new ByteArrayContent(buffer);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
-            string imgType = avatar.FileType;
+            
 
             StringBuilder builder = new StringBuilder();
             builder.Append(accessName);
